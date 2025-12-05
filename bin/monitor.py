@@ -15,6 +15,10 @@ import os
 import re
 import logging
 from dotenv import load_dotenv
+import urllib3
+
+# SSL-Warnungen unterdrücken
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Logging konfigurieren
 logging.basicConfig(
@@ -176,7 +180,8 @@ def main():
     # Webseite abrufen
     logger.info(f"Rufe Webseite ab: {URL}")
     try:
-        response = requests.get(URL)
+        # SSL-Verifizierung deaktivieren, falls Zertifikatsprobleme auftreten
+        response = requests.get(URL, verify=False)
         response.encoding = "utf-8"
         soup = BeautifulSoup(response.text, "lxml")
     except Exception as e:
